@@ -1,0 +1,112 @@
+S2 
+
+kreiramo potpis metode bez definicije prijavice nam gresku CTRL+1 da kreira definiciju
+stavljenje linija pod komentar CTRL+SHIFT+C
+promena naziva metode desni klik na naziv promeni je svuda u nazivu
+CTRL+D brisemo red
+CTRL+SHIFT+F formatiramo kod
+
+uporedicemo primer u tradicijonalnom programiranju i funkcionalnom programiranju 
+
+Zelimo da ispisemo elemente liste koji su brojevi u posebnoj liniji na tradicionalni i funkcionalni nacin programiranja
+
+
+**************************************Structured programing************************************************************
+import java.util.Arrays;
+import java.util.List;
+
+public class FP01Structured {
+
+	public static void main(String args[]) {
+
+		printAllNumbersInListStructured(Arrays.asList(1, 2, 3, 3, 4, 5, 6, 7, 8, 9, 10, 10));
+
+	}
+
+	private static void printAllNumbersInListStructured(List<Integer> numbers) {
+		// Prvo pitanje u struktuiranom pristupu programiranju je kako proci kroz listu,
+		// koju vrstu petlje da koristimo
+		for (Integer number : numbers) {
+			System.out.println(number.intValue());
+		}
+
+	}
+
+}
+
+**************************************Functional programing************************************************************
+import java.util.Arrays;
+import java.util.List;
+
+public class FP01Functional {
+
+	public static void main(String args[]) {
+
+		printAllNumbersInListFunctional(Arrays.asList(1, 2, 3, 3, 4, 5, 6, 7, 8, 9, 10, 10));
+
+	}
+
+	private static void print(int number) {
+		System.out.println(number);
+	}
+
+	private static void printAllNumbersInListFunctional(List<Integer> numbers) {
+		// Prvo pitanje u funkcionalnom pristupu programiranju je sta uraditi
+		// pre nego sto to uradimo potrebno je konvertovati listu u stream elemenata
+		// dakle
+		// [1, 2, 3, 3, 4, 5, 6, 7, 8, 9,10, 10] ovaj niz u sekvencu brojeva
+		// 1
+		// 2
+		// 3
+		// 3
+		// 4
+		// 5
+		// 6
+		// 7
+		// 8
+		// 9
+		// 10
+		// 10
+		numbers.stream()// kada smo dobili stream od liste definisemo sta treba raditi sa svakim od
+						// elemenata
+				.forEach(FP01Functional::print);// to radimo sa naredbom forEach i u zagradi navodimo akciju ukoliko
+												// zelimo da pozovemo neku medodu navodimo takozvani metod reference gde
+												// stavljamo Naziv_Klase::naziv_metode to je Method reference
+
+	}
+
+}
+
+
+Za sada ovo funkcionalno programiranje deluje jako kompleksno ali probajmo sada ovo drugacije da napisemo da ne pozivamo metodu print
+metodu println smo mogli i direktno pozvati u forEach bez potrebe da se pravi staticka metoda print
+
+		numbers.stream()
+				.forEach(System.out::println);//Klasa System.out ima staticku metodu println
+        
+dakle ovo sada deluje jednostavnije od strukturnog programiranja ne moramo da vodimo racuna kako da prodjemo kroz listu samo sta treba uraditi.
+
+Ukoliko bi zelelei da pretrazimo samo parne brojeve u klasu FP01Structured dodajemo metodu
+
+	private static void printEventNumbersInListStructured(List<Integer> numbers) {
+		for (Integer number : numbers) {
+			if (number % 2 == 0) {
+				System.out.println(number.intValue());
+			}
+		}
+
+	}
+
+dok bi u FP01Functional to izgledalo ovako dodajemo staticku metodu isEven
+
+	private static boolean isEven(int number) {
+		return number % 2 == 0;
+	}
+  
+  i metodu
+  
+  	private static void printEvenNumbersInListFunctional(List<Integer> numbers) {
+		numbers.stream()
+			.filter(FP01Functional::isEven)//uvodimo pojam filtera kao u prethodnom primeru koristimo Method reference posto je isEven staticka metoda
+			.forEach(System.out::println);
+	}
