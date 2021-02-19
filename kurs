@@ -86,6 +86,8 @@ metodu println smo mogli i direktno pozvati u forEach bez potrebe da se pravi st
         
 dakle ovo sada deluje jednostavnije od strukturnog programiranja ne moramo da vodimo racuna kako da prodjemo kroz listu samo sta treba uraditi.
 
+Uvedimo sada pojam Filtera
+
 Ukoliko bi zelelei da pretrazimo samo parne brojeve u klasu FP01Structured dodajemo metodu
 
 	private static void printEventNumbersInListStructured(List<Integer> numbers) {
@@ -110,3 +112,99 @@ dok bi u FP01Functional to izgledalo ovako dodajemo staticku metodu isEven
 			.filter(FP01Functional::isEven)//uvodimo pojam filtera kao u prethodnom primeru koristimo Method reference posto je isEven staticka metoda
 			.forEach(System.out::println);
 	}
+	
+	Ovo sada opet deluje kompleksnije u odnosu na Struktuirano programiranje posto ovde uvodimo jos jedan metod isEven pogledajmo sada da li bi to nekako drugacije moglo da se napise da
+	ceo uslov definisemo u filter naredbi
+	
+	Uvodjenje Lambda izraza kako bi poboljsali Funkcionalno programiranje
+	
+	Sada cemo poziv iz isEven metode zameniti Lambda izrazom, sta je Lambda izraz to je nista drugo nego jednostavniji nacin definisanja metoda dakle to je nista drugo
+	nego METOD sta je ulaz u nasu metodu isEven pa to je number a sta ispitujemo number % 2 == 0
+	to mozemo napisati kao number -> number % 2 == 0
+	posto po defaultu ako izraz ima samo jednu naredbu njen rezultat se vraca kao rezultat celog Lambda izraza
+	
+		private static void printEvenNumbersInListFunctional(List<Integer> numbers) {
+		numbers.stream()
+			//.filter(FP01Functional::isEven)
+			.filter(number -> number % 2 == 0)//Lambda expresion
+			.forEach(System.out::println);
+	}
+
+
+Dakle logiku isEven metode smo prebacili u ovaj Lambda izraz
+Ispod su nekoliko primera za vezbu Lambda izraza
+
+		List<String> courses = Arrays.asList("Spring", "Spring Boot", "API", "Microservices", "AWS", "PCS", "Azure",
+				"Docker", "Kubernetes");
+		
+		
+		printOddNumbersInListFunctional(Arrays.asList(1, 2, 3, 3, 4, 5, 6, 7, 8, 9, 10, 10));
+		printAllCourses(courses);
+		printCoursesThatContainsWordSpring(courses);
+		printCoursesThatContainsAtleastFourWords(courses);
+		
+		
+	//Svi neparni
+	private static void printOddNumbersInListFunctional(List<Integer> numbers) {
+		numbers.stream().filter(number -> number % 2 != 0)// Lambda expresion
+			.forEach(System.out::println);
+	}
+	//Svi iz liste courses
+	private static void printAllCourses(List<String> courses) {
+		courses.stream().forEach(System.out::println);
+	}
+	//Svi iz liste courses koji sadrze rec Spring
+	private static void printCoursesThatContainsWordSpring(List<String> courses) {
+		courses.stream()
+			.filter(course -> course.contains("Spring"))
+			.forEach(System.out::println);
+	}
+	//Svi iz liste courses koji sadrze bar 4 slova
+	private static void printCoursesThatContainsAtleastFourWords(List<String> courses) {
+		courses.stream()
+			.filter(course -> course.length()>=4)
+			.forEach(System.out::println);
+	}
+
+Ono sto smo do sada imali je da smo radili filtriranje liste elemenata i radili njihovo ispisivanje.
+Sta ukoliko bi sada pre ispisivanja elemenata trebalo uraditi neku funkciju na njima, dakle ne zelimo da 
+ispisemo sam element ves prvo da nad svakim elementom izvrsimo neki Lambda izraz tu koristimo map
+Na primer ispisati kvadrat svih neparnih brojeva iz liste
+
+//Ispisati kvadrat svih neparnih brojeva
+private static void printSquareOfOddNumbersInListFunctional(List<Integer> numbers) {
+	numbers.stream()
+		.filter(number -> number % 2 != 0)// Lambda expresion
+		.map(number -> number * number)// Lambda expresion
+		.forEach(System.out::println);
+}
+
+Isto tako mozemo uraditi treci stepen od parnih ili duzinu naziva kursa
+
+		//to je samo ova naredba
+		courses.stream()
+			.map(course -> course.length())
+			.forEach(System.out::println);
+			
+	ili ukoliko zelimo da vidimo i naziv kursa pored duzine
+	
+		//to je samo ova naredba
+		courses.stream()
+			.map(course -> course+" "+course.length())
+			.forEach(System.out::println);
+Ukratko za sada			
+			
+1.Ovde se fokusiramo sta treba uraditi
+2.Prvo konvertujemo listu u stream elemenata u sekvencu
+3.Nakon toga mozemo primeniti neke od metoda kao sto je filter za definisanje uslova sta ide dalje
+4.forEach se koristi za konzumiranje elementa dakle na primer ovde uzmemo element i ispisijemo ga
+5.Ukoliko je potrebno uraditi neku obradu nad elementima koristimo map
+6.Videli smo Lambda izraze koji prestavljaju nista drugo nego pojednostavljeni nacin pisanja metoda
+7.Takodje smo videli Metod references koga smo koristili za pozivanje statickih metoda kao sto je println ili onih koje smo mi napravili
+
+			
+
+
+
+
+
